@@ -1,0 +1,164 @@
+openapi: 3.0.3
+info:
+  title: NeCommerce
+  description: |-
+    NeCommerce api
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /auth/register:
+    post:
+      tags:
+        
+        - 🔐 Authentication
+      summary: Register user
+      description: >-
+        The API endpoint allows users to register or signup to create their
+        accounts.
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                  example: Nirmal Neupane
+                email:
+                  type: string
+                  example: neupanenirmal417@gmail.com
+                phone:
+                  type: string
+                  example: 9821238476
+                password:
+                  type: string
+                  example: Test@123
+                role:
+                  type: string
+                  example: USER
+                address:
+                  type: string
+                  example: Bharatpur
+      responses:
+        '201':
+          description: Register user
+          
+  /auth/login:
+    post:
+      tags:
+        
+        - 🔐 Authentication
+      summary: login user
+      description: >-
+        The API endpoint allows users to login
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: neupanenirmal417@gmail.com
+                password:
+                  type: string
+                  example: Test@123
+      responses:
+        '200':
+          description: Register user
+  
+  /auth/email-verification:
+    post:
+      tags:
+        
+        - 🔐 Authentication
+      summary: verify email
+      description: >-
+        The API endpoint allows users to verify their email
+      operationId: emailVerify
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: neupanenirmal417@gmail.com
+                otp:
+                  type: number
+                  example: 12345
+      responses:
+        '200':
+          description: email is verified
+  
+  /auth/initiate-password-reset:
+    post:
+      tags:
+        
+        - 🔐 Authentication
+      summary: initiate password reset
+      description: >-
+        The API endpoint allows users to initate password reset
+      operationId: initiatePasswordReset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: neupanenirmal417@gmail.com
+      responses:
+        '200':
+          description: otp is send to your mail
+
+  /auth/finalize-password-reset:
+    post:
+      tags:
+        
+        - 🔐 Authentication
+      description: >-
+        The API endpoint allows users change password. It is a final step of password change
+      operationId: finalizepasswordreset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: neupanenirmal417@gmail.com
+                otp:
+                  type: number
+                  example: 12345
+                new_password:
+                  type: string
+                  example: Test@123
+      responses:
+        '200':
+          description: password change
+          
+  /auth/resend-email-verification:
+    post:
+      tags:
+      
+         - 🔐 Authentication
+      operationId: resendEmailVerification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: neupanenirmal417@gmail.com
+      responses:
+        '200':
+          description: email send
