@@ -1,4 +1,4 @@
-import { Role } from "./user.enum.js";
+import { Role } from "./enum.ts";
 
 export {};
 

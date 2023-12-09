@@ -8,7 +8,7 @@ const sequelize = new Sequelize(process.env.PG_URI || "", {
 const connectDb = async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync({force:true}); //In production it should be removed
+    await sequelize.sync({force:false}); //In production it should be removed
   } catch (error) {
     console.log(showError(error));
   }

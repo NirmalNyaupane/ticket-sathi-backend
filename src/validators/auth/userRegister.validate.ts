@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import { Role } from "../../types/user.enum.js";
+import { Role } from "../../types/enum.js";
 
 const userRegisterValidators = () => {
   return [

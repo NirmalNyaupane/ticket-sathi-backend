@@ -3,7 +3,7 @@ import UserModel from "../models/user.model.js";
 import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import { Role } from "../types/user.enum.js";
+import { Role } from "../types/enum.js";
 dotenv.config();
 
 const verifyJwt = async (req: Request, res: Response, next: NextFunction) => {
@@ -48,7 +48,7 @@ const verifyJwt = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const verifyPermission = (roles: Role[]) => {
-  async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     if (!req.user?.id) {
       return next(new ApiError(401, "Unauthorized"));
     }

@@ -2,11 +2,11 @@ import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
-  Model
+  Model,
 } from "sequelize";
 import { sequelize } from "../db/index.js";
 import UserModel from "./user.model.js";
-
+import { OrganizerStatus } from "../types/enum.js";
 class OrganizerModel extends Model<
   InferAttributes<OrganizerModel>,
   InferCreationAttributes<OrganizerModel>
@@ -19,6 +19,7 @@ class OrganizerModel extends Model<
   declare website: string;
   declare address: string;
   declare social_links: Array<JSON>;
+  declare status: OrganizerStatus;
 }
 
 OrganizerModel.init(
@@ -57,12 +58,17 @@ OrganizerModel.init(
       type: DataTypes.ARRAY(DataTypes.JSON),
       allowNull: false,
     },
+    status: {
+      type: DataTypes.ENUM(
+        OrganizerStatus.ACTIVE,
+        OrganizerStatus.PENDING,
+        OrganizerStatus.SUSPEND
+      ),
+      allowNull:false
+    },
   },
   {
     sequelize,
-    hooks: {
-      beforeSave: async () => {},
-    },
     indexes: [
       {
         unique: true,

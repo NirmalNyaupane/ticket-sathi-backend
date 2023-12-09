@@ -33,7 +33,7 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
         user?.password || ""
       );
       if (!isPasswordCorrect)
-        return next(new ApiError(400, "old_password is not correct"));
+        return next(new ApiError(400, "Bad request", ["logo is required"]));
     }
 
     //if avatar is present in request

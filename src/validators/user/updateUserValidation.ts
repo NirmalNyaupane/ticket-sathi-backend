@@ -1,5 +1,5 @@
 import { body, check } from "express-validator";
-import { Role } from "../../types/user.enum.js";
+import { Role } from "../../types/enum.js";
 const userUpdateValidation = () => {
   console.log(body("full_name").isAfter());
   return [

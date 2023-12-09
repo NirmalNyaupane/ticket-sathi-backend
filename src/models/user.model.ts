@@ -9,7 +9,7 @@ import {
   InferCreationAttributes,
   Model,
 } from "sequelize";
-import { Role } from "../types/user.enum.js";
+import { Role } from "../types/enum.js";
 import OrganizerModel from "./organizer.model.js";
 
 dotenv.config();
