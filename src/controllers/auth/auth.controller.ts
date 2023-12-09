@@ -1,16 +1,16 @@
 import bcrypt from "bcrypt";
 import { NextFunction, Request, Response } from "express";
-import OtpModel from "../models/otp.model.js";
-import UserModel from "../models/user.model.js";
-import { error } from "../theme/chalk.theme.js";
-import ApiError from "../utils/ApiError.js";
-import ApiResponse from "../utils/ApiResponse.js";
-import { generateOtpExpireTime } from "../utils/helper.js";
+import OtpModel from "../../models/otp.model.js";
+import UserModel from "../../models/user.model.js";
+import { error } from "../../theme/chalk.theme.js";
+import ApiError from "../../utils/ApiError.js";
+import ApiResponse from "../../utils/ApiResponse.js";
+import { generateOtpExpireTime } from "../../utils/helper.js";
 import {
   emailVerificationMailGenContent,
   registerEmailVerificationMailGenContent,
   sendMail,
-} from "../utils/mail.js";
+} from "../../utils/mail.js";
 const registerUserController = async (
   req: Request,
   res: Response,
@@ -125,6 +125,7 @@ const loginController = async (
       access_token: accessToken,
       role: user.role,
       is_verified: user.is_verified,
+      is_organizer_registered:user.is_organizer_registered
     });
   } catch (error) {
     console.log(error);

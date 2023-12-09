@@ -9,6 +9,8 @@ import { fileURLToPath } from "url";
 import yaml from "yaml";
 import fs from "fs";
 import swaggerUi from "swagger-ui-express";
+import cookieParsel from "cookie-parser";
+import path from "path";
 dotenv.config();
 
 const __fileName = fileURLToPath(import.meta.url);
@@ -26,7 +28,8 @@ const httpServer = http.createServer(app);
 /********************** global middlewares ****************************/
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(cookieParsel());
+app.use(express.static("public")); //Static configure for locally stored file
 
 app.use(
   cors({
@@ -58,7 +61,7 @@ app.use(
   swaggerUi.setup(swaggerDocument, {
     swaggerOptions: {
       docExpansion: "none",
-      defaultOpen:true
+      defaultOpen: true,
     },
     customSiteTitle: "NeCommerce",
   })
@@ -67,8 +70,15 @@ app.use(
 /*************************** app route starts *******************************************/
 import authRouter from "./routes/auth.routes.js";
 import ApiError from "./utils/ApiError.js";
-import path from "path";
+import userRouter from "./routes/user.routes.js";
+import organizerRouter from "./routes/organizer.routes.js";
+//auth router
 app.use("/auth", authRouter);
+
+//user router
+app.use("/user", userRouter);
+
+app.use("/organizer", organizerRouter);
 
 /**** global error handler *****/
 

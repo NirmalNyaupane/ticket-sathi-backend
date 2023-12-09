@@ -1,6 +1,7 @@
 enum Role{
     USER="USER",
-    SELLER="SELLER"
+    ORGANIZER="ORGANIZER",
+    ADMIN="ADMIN"
 }
 
 export {Role};

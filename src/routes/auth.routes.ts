@@ -6,7 +6,7 @@ import {
   initiatePasswordResetController,
   finalizePasswordResetController,
   resendEmailVerificationController,
-} from "../controllers/auth.controller.js";
+} from "../controllers/auth/auth.controller.js";
 import {
   userLoginValidation,
   userRegisterValidators,

@@ -1,7 +1,10 @@
-import { OTP_EXPIRE } from "../constant/index.js"
+import { OTP_EXPIRE } from "../constant/index.js";
 
-const generateOtpExpireTime = ():Date=>{
-    return new Date(Date.now() + OTP_EXPIRE)
-}
+const generateOtpExpireTime = (): Date => {
+  return new Date(Date.now() + OTP_EXPIRE);
+};
 
-export {generateOtpExpireTime};
+const ifElseObj = <T>(condition: boolean, ifTrue: T) =>
+  condition ? ifTrue : {};
+
+export { generateOtpExpireTime, ifElseObj };

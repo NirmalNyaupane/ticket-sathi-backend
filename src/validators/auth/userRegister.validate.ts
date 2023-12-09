@@ -29,9 +29,9 @@ const userRegisterValidators = () => {
     body("address").trim().optional(),
     body("role")
       .trim()
-      .isIn([Role.SELLER, Role.USER])
+      .isIn([Role.ORGANIZER, Role.USER, Role.ADMIN])
       .withMessage(
-        `role must be one of the following values: ${Role.SELLER}, ${Role.USER}`
+        `role must be one of the following values: ${Role.ORGANIZER}, ${Role.USER}, ${Role.ADMIN}`
       ),
 
     body("password")

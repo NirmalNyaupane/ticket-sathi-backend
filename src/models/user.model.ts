@@ -1,16 +1,16 @@
 import { sequelize } from "../db/index.js";
 
+import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
 import {
-  Model,
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
+  Model,
 } from "sequelize";
-import bcrypt from "bcrypt";
 import { Role } from "../types/user.enum.js";
-import OtpModel from "./otp.model.js";
-import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+import OrganizerModel from "./organizer.model.js";
 
 dotenv.config();
 
@@ -27,7 +27,9 @@ class UserModel extends Model<
   declare address: string | null;
   declare role: Role;
   declare is_verified: boolean;
-
+  declare createdAt?: Date;
+  declare updatedAt?: Date;
+  declare is_organizer_registered?: boolean;
   //this function verify the password of user
   async verifyPassword(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password);
@@ -49,7 +51,7 @@ class UserModel extends Model<
 UserModel.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
@@ -80,10 +82,14 @@ UserModel.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM(Role.USER, Role.SELLER),
+      type: DataTypes.ENUM(Role.USER, Role.ORGANIZER),
       allowNull: false,
     },
     is_verified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    is_organizer_registered: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
@@ -98,7 +104,7 @@ UserModel.init(
     },
   }
 );
-
-UserModel.hasOne(UserModel, { onDelete: "cascade" });
+UserModel.hasOne(UserModel, { onDelete: "CASCADE" });
+// UserModel.hasOne(OrganizerModel,{onDelete:"CASCADE"});
 
 export default UserModel;

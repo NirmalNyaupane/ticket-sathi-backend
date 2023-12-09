@@ -6,6 +6,11 @@ info:
   version: 1.0.0
 servers:
   - url: http://localhost:8080
+securityDefinitions:  
+  JWT:  
+    type: apiKey  
+    in: header  
+    name: access_token
 paths:
   /auth/register:
     post:

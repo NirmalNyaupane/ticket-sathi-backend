@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { httpServer } from "./app.js";
-import { sucess, error, warning} from "./theme/chalk.theme.js";
 import { connectDb } from "./db/index.js";
+import { sucess } from "./theme/chalk.theme.js";
 
 dotenv.config();
 

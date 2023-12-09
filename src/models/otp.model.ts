@@ -1,12 +1,11 @@
+import bcrypt from "bcrypt";
 import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
   Model,
 } from "sequelize";
-import { OTP_EXPIRE } from "../constant/index.js";
 import { sequelize } from "../db/index.js";
-import bcrypt from "bcrypt";
 import UserModel from "./user.model.js";
 class OtpModel extends Model<
   InferAttributes<OtpModel>,
