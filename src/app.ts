@@ -68,17 +68,22 @@ app.use(
 );
 
 /*************************** app route starts *******************************************/
-import authRouter from "./routes/auth.routes.js";
+import authRouter from "./routes/auth/auth.routes.js";
 import ApiError from "./utils/ApiError.js";
-import userRouter from "./routes/user.routes.js";
-import organizerRouter from "./routes/organizer.routes.js";
+import userRouter from "./routes/auth/user.routes.js";
+import organizerRouter from "./routes/organizer/organizer.routes.js";
+import eventRouter from "./routes/event/event.routes.js";
 //auth router
 app.use("/auth", authRouter);
 
 //user router
 app.use("/user", userRouter);
 
+//organizer router
 app.use("/organizer", organizerRouter);
+
+//event router
+app.use("/event", eventRouter);
 
 /**** global error handler *****/
 

@@ -6,15 +6,15 @@ import {
   initiatePasswordResetController,
   finalizePasswordResetController,
   resendEmailVerificationController,
-} from "../controllers/auth/auth.controller.js";
+} from "../../controllers/auth/auth.controller.js";
 import {
   userLoginValidation,
   userRegisterValidators,
   initiatePasswordResetValidation,
   finalizePasswordResetValidation,
-} from "../validators/auth/userRegister.validate.js";
-import optValidators from "../validators/otp/optValidators.js";
-import validate from "../validators/validate.js";
+} from "../../validators/auth/userRegister.validate.js";
+import optValidators from "../../validators/otp/optValidators.js";
+import validate from "../../validators/validate.js";
 
 const router = Router();
 

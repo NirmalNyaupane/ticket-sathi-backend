@@ -7,6 +7,7 @@ import {
 import { sequelize } from "../db/index.js";
 import UserModel from "./user.model.js";
 import { OrganizerStatus } from "../types/enum.js";
+import EventCategoryModel from "./eventcategory.model.js";
 class OrganizerModel extends Model<
   InferAttributes<OrganizerModel>,
   InferCreationAttributes<OrganizerModel>
@@ -64,7 +65,7 @@ OrganizerModel.init(
         OrganizerStatus.PENDING,
         OrganizerStatus.SUSPEND
       ),
-      allowNull:false
+      allowNull: false,
     },
   },
   {

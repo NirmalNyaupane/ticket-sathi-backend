@@ -2,11 +2,11 @@ import { Router } from "express";
 import {
   getCurrentUser,
   updateUser,
-} from "../controllers/user/user.controller.js";
-import { verifyJwt } from "../middlewares/auth.middleware.js";
-import upload from "../middlewares/multer.middleware.js";
-import userUpdateValidation from "../validators/user/updateUserValidation.js";
-import validate from "../validators/validate.js";
+} from "../../controllers/user/user.controller.js";
+import { verifyJwt } from "../../middlewares/auth.middleware.js";
+import upload from "../../middlewares/multer.middleware.js";
+import userUpdateValidation from "../../validators/user/updateUserValidation.js";
+import validate from "../../validators/validate.js";
 const router = Router();
 
 router

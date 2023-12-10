@@ -104,7 +104,7 @@ UserModel.init(
     },
   }
 );
-UserModel.hasOne(UserModel, { onDelete: "CASCADE" });
+// UserModel.hasOne(UserModel, { onDelete: "CASCADE" });
 // UserModel.hasOne(OrganizerModel,{onDelete:"CASCADE"});
 
 export default UserModel;
