@@ -12,7 +12,7 @@ cloudinary.config({
 
 /* this function takes the url of local image which is stored locally on our server through multer */
 const uploadOnClouldinary = async (
-  localUrl: string
+  localUrl: string,
 ): Promise<UploadApiResponse | null> => {
   try {
     if (!localUrl) return null;

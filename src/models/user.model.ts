@@ -42,7 +42,7 @@ class UserModel extends Model<
         sub: this.id,
         role: this.role,
       },
-      process.env.ACCESS_TOKEN_SECRET || "ojojreoer",
+      process.env.ACCESS_TOKEN_SECRET as string,
       { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
     );
   }

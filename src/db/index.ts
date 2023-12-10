@@ -3,6 +3,7 @@ import { Sequelize } from "sequelize";
 import { error as showError } from "../theme/chalk.theme.js";
 import defineAssociation from "../models/index.js";
 
+// deepcode ignore ServerLeak: <please specify a reason of ignoring this>
 const sequelize = new Sequelize(process.env.PG_URI || "", {
   dialect: "postgres",
 });

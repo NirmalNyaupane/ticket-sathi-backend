@@ -21,7 +21,7 @@ const userRegisterValidators = () => {
       .trim()
       .notEmpty()
       .withMessage("phone_number is required")
-      .matches(/[0-9]/)
+      .matches(/\d/)
       .withMessage("Invalid phone_number")
       .isLength({ max: 10, min: 10 })
       .withMessage("Invalid phone_number"),

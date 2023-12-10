@@ -1,4 +1,4 @@
-import http from "http";
+import https from 'https'
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -11,6 +11,7 @@ import fs from "fs";
 import swaggerUi from "swagger-ui-express";
 import cookieParsel from "cookie-parser";
 import path from "path";
+import Tokens from 'csrf';
 dotenv.config();
 
 const __fileName = fileURLToPath(import.meta.url);
@@ -23,7 +24,7 @@ const file = fs.readFileSync(
 const swaggerDocument = yaml.parse(file);
 
 const app = express();
-const httpServer = http.createServer(app);
+const httpServer = https.createServer(app);
 
 /********************** global middlewares ****************************/
 app.use(express.json({ limit: "16kb" }));
@@ -55,6 +56,7 @@ const limiter = rateLimit({
 app.use(limiter);
 app.use(helmet());
 
+// app.use(csrf());
 app.use(
   "/docs",
   swaggerUi.serve,
