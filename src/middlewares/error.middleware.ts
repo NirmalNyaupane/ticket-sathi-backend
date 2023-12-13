@@ -14,6 +14,7 @@ const errorHandler = (
   //If error is not an api error then we have to created new error
 
   if (!(error instanceof ApiError)) {
+    console.log(err);
     error = new ApiError(500, "Something went wrong");
   }
 

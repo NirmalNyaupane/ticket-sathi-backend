@@ -85,9 +85,63 @@ const getAllCategory = async (
   }
 };
 
-const updateCategory =async (req:Request, res:Response, next:NextFunction) => {
+const updateCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
     const id = req.params.id;
-    console.log(id);
-}
+    //check if category is exist or not with this id
+    const eventCategory = await EventCategoryModel.findByPk(id);
 
-export { createEventCategory, getAllCategory, updateCategory };
+    if (!eventCategory) {
+      return next(new ApiError(400, "category with this id doesnot exits"));
+    }
+    const updateResponse = await EventCategoryModel.update(req.body, {
+      where: { id: id },
+    });
+
+    if (updateResponse[0] === null) {
+      return next(new ApiError(500, "Internal server error"));
+    }
+
+    const updatedCategory = await EventCategoryModel.findByPk(id);
+    return res
+      .status(200)
+      .json(new ApiResponse(200, updatedCategory, "Event category updated"));
+  } catch (err) {
+    console.log(err);
+    return next(new ApiError(500, "Internal server error"));
+  }
+};
+
+const deleteCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = req.params.id;
+    //check if category is exist or not with this id
+    const eventCategory = await EventCategoryModel.findByPk(id);
+
+    if (!eventCategory) {
+      return next(new ApiError(400, "category with this id doesnot exits"));
+    }
+
+    const deleteResponse = await EventCategoryModel.destroy({
+      where: { id: id },
+    });
+    if (deleteResponse === 1) {
+      return res.status(200).json({ message: "category deleted sucessfully" });
+    } else {
+      return next(new ApiError(500, "Internal server error"));
+    }
+  } catch (error) {
+    console.log(error);
+    return next(new ApiError(500, "Internal server error"));
+  }
+};
+
+export { createEventCategory, getAllCategory, updateCategory, deleteCategory };

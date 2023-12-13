@@ -1,4 +1,4 @@
-import https from 'https'
+import http from 'http'
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -24,7 +24,7 @@ const file = fs.readFileSync(
 const swaggerDocument = yaml.parse(file);
 
 const app = express();
-const httpServer = https.createServer(app);
+const httpServer = http.createServer(app);
 
 /********************** global middlewares ****************************/
 app.use(express.json({ limit: "16kb" }));

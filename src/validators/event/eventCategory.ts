@@ -1,6 +1,7 @@
 import { body, param } from "express-validator";
 
 const eventCategoryValidation = () => {
+  console.log("hello there");
   return [
     body("category_name")
       .trim()
@@ -12,12 +13,13 @@ const eventCategoryValidation = () => {
 };
 
 const eventCategoryUpdateValidaton = () => {
+  console.log(body("category_name"));
   return [
     body("category_name").optional().trim().toLowerCase(),
-    body("description").optional(),
+    body("description").optional().isString().withMessage("description must be string"),
     param("id")
       .notEmpty()
-      .isString()
+      .isUUID()
       .withMessage("id must be UUID"),
   ];
 };

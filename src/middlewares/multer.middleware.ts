@@ -1,6 +1,6 @@
 import multer from "multer";
 import ApiError from "../utils/ApiError.js";
-const storage = multer.diskStorage({
+export const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/temp");
   },
@@ -40,9 +40,9 @@ const upload = multer({
     }
     cb(new ApiError(400, "only image is allowed"));
   },
-  limits: {
-    fieldSize: 1000,
-  },
+  // limits: {
+  //   fieldSize: 1000,
+  // },
 });
 
 export default upload;

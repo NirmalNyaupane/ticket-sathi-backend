@@ -20,9 +20,6 @@ const uploadOnClouldinary = async (
       localUrl,
       {
         resource_type: "auto",
-      },
-      (err, rs) => {
-        console.log(rs);
       }
     );
 
