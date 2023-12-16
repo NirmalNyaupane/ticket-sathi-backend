@@ -5,9 +5,8 @@ import {
   Model,
 } from "sequelize";
 import { sequelize } from "../db/index.js";
-import UserModel from "./user.model.js";
 import { OrganizerStatus } from "../types/enum.js";
-import EventCategoryModel from "./eventcategory.model.js";
+import UserModel from "./user.model.js";
 class OrganizerModel extends Model<
   InferAttributes<OrganizerModel>,
   InferCreationAttributes<OrganizerModel>

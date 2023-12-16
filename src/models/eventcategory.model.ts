@@ -55,4 +55,9 @@ EventCategoryModel.belongsTo(OrganizerModel, {
   onDelete: "CASCADE",
 });
 
+OrganizerModel.hasOne(EventCategoryModel, {
+  onDelete: "CASCADE",
+  foreignKey:"organizer_id",
+});
+
 export default EventCategoryModel;

@@ -1,4 +1,4 @@
-import http from 'http'
+import http from "http";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -11,7 +11,7 @@ import fs from "fs";
 import swaggerUi from "swagger-ui-express";
 import cookieParsel from "cookie-parser";
 import path from "path";
-import Tokens from 'csrf';
+import Tokens from "csrf";
 dotenv.config();
 
 const __fileName = fileURLToPath(import.meta.url);
@@ -69,12 +69,17 @@ app.use(
   })
 );
 
+// app.use("/*", (req, res, next) => {
+//   return next(new ApiError(400, `Cannot ${req.method} ${req.url}`));
+// });
 /*************************** app route starts *******************************************/
 import authRouter from "./routes/auth/auth.routes.js";
 import ApiError from "./utils/ApiError.js";
 import userRouter from "./routes/auth/user.routes.js";
 import organizerRouter from "./routes/organizer/organizer.routes.js";
 import eventRouter from "./routes/event/event.routes.js";
+import ticketRouter from './routes/event/ticket.routes.js';
+
 //auth router
 app.use("/auth", authRouter);
 
@@ -86,7 +91,7 @@ app.use("/organizer", organizerRouter);
 
 //event router
 app.use("/event", eventRouter);
-
+app.use("/event-ticket", ticketRouter);
 /**** global error handler *****/
 
 app.use(errorHandler);

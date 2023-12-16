@@ -10,7 +10,20 @@ import EventCategoryModel from "./eventcategory.model.js";
 class EventModel extends Model<
   InferAttributes<EventModel>,
   InferCreationAttributes<EventModel>
-> {}
+> {
+  declare id?: string;
+  declare name: string;
+  declare type: Event;
+  declare description: string;
+  declare event_start_date: Date;
+  declare event_end_date: Date;
+  declare images: Array<string>;
+  declare poster: string;
+  declare venue: string;
+  declare event_category_id: string;
+  declare status?: EventStatus;
+  declare address: string;
+}
 
 EventModel.init(
   {
@@ -18,6 +31,10 @@ EventModel.init(
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+      allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     type: {
@@ -52,16 +69,22 @@ EventModel.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    status:{
-      type:DataTypes.ENUM(EventStatus.ACTIVE, EventStatus.PENDING),
-      allowNull:false
+    status: {
+      type: DataTypes.ENUM(EventStatus.ACTIVE, EventStatus.PENDING),
+      allowNull: false,
+      defaultValue: EventStatus.PENDING,
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: null,
+      allowNull: false,
     },
   },
   {
+    indexes: [
+      {
+        fields: ["name"],
+      },
+    ],
     sequelize,
     modelName: "Event",
   }
@@ -70,5 +93,11 @@ EventModel.belongsTo(EventCategoryModel, {
   onDelete: "CASCADE",
   foreignKey: "event_category_id",
   targetKey: "id",
+});
+
+EventCategoryModel.hasOne(EventModel, {
+  onDelete: "CASCADE",
+  foreignKey:"event_category_id",
+  // foreignKeyConstraint:true
 });
 export default EventModel;

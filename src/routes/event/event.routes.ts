@@ -1,25 +1,32 @@
 import { Router } from "express";
 import {
-  eventCategoryUpdateValidaton,
-  eventCategoryValidation,
-  deleteCategoryValidation,
-} from "../../validators/event/eventCategory.js";
-import validate from "../../validators/validate.js";
-import {
-  verifyJwt,
-  verifyPermission,
-} from "../../middlewares/auth.middleware.js";
-import { Role } from "../../types/enum.js";
-import { createEvent as createEventController } from "../../controllers/event/event.controller.js";
+  createEvent as createEventController,
+  deleteEvent,
+  getEvent,
+  updateEvent,
+} from "../../controllers/event/event.controller.js";
 import {
   createEventCategory,
   getAllCategory,
   updateCategory,
 } from "../../controllers/event/eventCategory.controller.js";
+import {
+  verifyJwt,
+  verifyPermission,
+} from "../../middlewares/auth.middleware.js";
+import { Role } from "../../types/enum.js";
+import {
+  createEventValidation,
+  eventIdValidation,
+  updateEventValidation,
+} from "../../validators/event/event.js";
+import {
+  eventCategoryUpdateValidaton,
+  eventCategoryValidation,
+} from "../../validators/event/eventCategory.js";
+
 import upload from "../../middlewares/multer.middleware.js";
-import { createEventValidation } from "../../validators/event/event.js";
-import multer from "multer";
-import { storage } from "../../middlewares/multer.middleware.js";
+import validate from "../../validators/validate.js";
 
 const router = Router();
 
@@ -27,15 +34,34 @@ router.use(verifyJwt);
 router.use(verifyPermission([Role.ORGANIZER]));
 
 /* ************************* Event router starts ************************************* */
-router.route("/").post(
-  multer({ storage: storage }).fields([
-    { name: "poster_image", maxCount: 1 },
-    { name: "images", maxCount: 10 },
-  ]),
-  createEventValidation(),
-  validate,
-  createEventController
-);
+router
+  .route("/")
+  .post(
+    upload.fields([
+      {
+        name: "poster_image",
+        maxCount: 1,
+      },
+      {
+        name: "images",
+        maxCount: 2,
+      },
+    ]),
+    createEventValidation(),
+    validate,
+    createEventController
+  )
+  .get(getEvent);
+
+router
+  .route("/:id")
+  .delete(eventIdValidation(), validate, deleteEvent)
+  .patch(
+    upload.single("poster_image"),
+    updateEventValidation(),
+    validate,
+    updateEvent
+  );
 
 /* ******************* Event Category ************************************************ */
 router
@@ -46,5 +72,5 @@ router
 router
   .route("/category/:id")
   .patch(eventCategoryUpdateValidaton(), validate, updateCategory)
-  .delete(deleteCategoryValidation(), validate);
+  .delete(eventCategoryValidation(), validate);
 export default router;

@@ -19,4 +19,9 @@ enum EventStatus {
   PENDING = "PENDING",
   ACTIVE = "ACTIVE",
 }
-export { Role, OrganizerStatus, Event, EventStatus};
+
+enum DiscountType {
+  FLAT = "FLAT",
+  PERCENTAGE = "PERCENTAGE",
+}
+export { Role, OrganizerStatus, Event, EventStatus, DiscountType };

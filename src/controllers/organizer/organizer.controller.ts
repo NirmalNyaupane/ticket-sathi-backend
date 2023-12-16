@@ -12,6 +12,7 @@ const registerOrganizerController = async (
   next: NextFunction
 ) => {
   try {
+    const {organizer_name, description, website, address, social_links} = req.body;
     const logoLocalPath = req.files?.logo && req.files?.logo[0].path;
 
     if (!logoLocalPath) {
@@ -37,7 +38,11 @@ const registerOrganizerController = async (
     }
 
     const organizerFormatData = {
-      ...req.body,
+      organizer_name, 
+      description, 
+      website, 
+      address, 
+      social_links,
       userId: req.user?.id,
       logo: logoPath?.secure_url,
       status: OrganizerStatus.PENDING,
@@ -66,7 +71,7 @@ const getOrganizerProfile = async (
     });
 
     if (!organizer) {
-      next("You havenot registered shop. Please registered shop first");
+      next("You havenot registered as a organizer. Please registered organizer first");
     }
 
     return res.status(200).json(new ApiResponse(200, organizer));
