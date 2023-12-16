@@ -7,18 +7,22 @@ import {
 import { sequelize } from "../db/index.js";
 import { DiscountType } from "../types/enum.js";
 import EventModel from "./event.model.js";
-class CouponModel extends Model<InferAttributes<CouponModel>, InferCreationAttributes<CouponModel>> {
-    declare id?:string;
-    declare event_id:string;
-    declare tickets_id:Array<string>;
-    declare name:string;
-    declare code:string;
-    declare discount_type:DiscountType;
-    declare discount:number;
-    declare discount_end_date:Date;
-    declare number_of_coupons:Date;
-    declare is_active:boolean;
-    declare min_amount:number
+import UserModel from "./user.model.js";
+class CouponModel extends Model<
+  InferAttributes<CouponModel>,
+  InferCreationAttributes<CouponModel>
+> {
+  declare id?: string;
+  declare event_id: string;
+  declare tickets_ids: Array<string>;
+  declare name: string;
+  declare code: string;
+  declare discount_type: DiscountType;
+  declare discount: number;
+  declare discount_end_date: Date;
+  declare number_of_coupons: Date;
+  declare is_active: boolean;
+  declare min_amount: number;
 }
 
 CouponModel.init(
@@ -33,7 +37,7 @@ CouponModel.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    tickets_id: {
+    tickets_ids: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
     },
@@ -43,6 +47,7 @@ CouponModel.init(
     },
     code: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
     discount_type: {
@@ -86,3 +91,5 @@ EventModel.hasMany(EventModel, {
   foreignKey: "event_id",
   onDelete: "CASCADE",
 });
+
+export default CouponModel;
