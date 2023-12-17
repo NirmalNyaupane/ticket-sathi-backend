@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { createCoupon } from "../../validators/event/coupon.validation.js";
+import {
+  createCoupon,
+  updateCoupon as updateCouponValidation,
+} from "../../validators/event/coupon.validation.js";
 import validate from "../../validators/validate.js";
 import {
   verifyJwt,
@@ -39,6 +42,8 @@ router
     verifyJwt,
     verifyPermission([Role.ORGANIZER]),
     validateId(),
+    validate,
+    updateCouponValidation(),
     validate,
     updateCoupon
   );

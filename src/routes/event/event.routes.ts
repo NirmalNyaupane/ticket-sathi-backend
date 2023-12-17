@@ -28,7 +28,12 @@ import {
 import { eventSpeakerValidation } from "../../validators/event/eventSpeaker.validation.js";
 import upload from "../../middlewares/multer.middleware.js";
 import validate from "../../validators/validate.js";
-import { eventSpeaker } from "../../controllers/event/eventSpeaker.controller.js";
+import {
+  eventSpeaker,
+  getEventSpeaker,
+  updateEventSpeaker,
+  deleteEventSpeaker,
+} from "../../controllers/event/eventSpeaker.controller.js";
 const router = Router();
 
 router.use(verifyJwt);
@@ -73,6 +78,20 @@ router
     validate,
     eventSpeaker
   );
+
+//get all event speakers by an event_id and update, delete by speaker id
+router
+  .route("/speaker/:id")
+  .get(eventIdValidation(), validate, getEventSpeaker)
+  .patch(
+    upload.single("avatar"),
+    eventIdValidation(),
+    validate,
+    updateEventValidation(),
+    validate,
+    updateEventSpeaker
+  )
+  .delete(eventIdValidation(), validate, deleteEventSpeaker);
 
 /* ******************* Event Category ************************************************ */
 router

@@ -75,4 +75,70 @@ const createCoupon = () => {
   ];
 };
 
-export { createCoupon };
+const updateCoupon = () => {
+  return [
+    body("event_id")
+      .trim()
+      .optional()
+      .isUUID()
+      .withMessage("event_id must be an UUID"),
+
+    body("tickets_ids")
+      .optional()
+      .isArray()
+      .withMessage("tickets_ids must be an array"),
+
+    check("tickets_ids.*")
+      .trim()
+      .optional()
+      .isUUID()
+      .withMessage("all tickets_ids must be an UUID"),
+
+    body("name").optional().trim().isString().withMessage("name must be an uuid"),
+
+    body("code")
+      .trim()
+      .toUpperCase()
+      .optional(),
+
+    body("discount_type")
+      .trim()
+      .optional()
+      .isIn([DiscountType.FLAT, DiscountType.PERCENTAGE])
+      .withMessage(
+        `discount_type must be one of ${DiscountType.FLAT}, ${DiscountType.PERCENTAGE}`
+      ),
+
+    body("discount")
+      .trim()
+      .optional()
+      .isNumeric()
+      .withMessage(
+        "discount must be an number representing amount or percentage"
+      ),
+
+    body("discount_end_date", "discount_end_date must be in future")
+      .optional()
+      .isISO8601()
+      .withMessage("discount_end_date must be ISO8601")
+      .custom((value, { req }) => {
+        return new Date(Date.now()).toISOString() < value;
+      }),
+
+    body("number_of_coupons")
+      .optional()
+      .isInt()
+      .withMessage("number_of_coupons must be an integer"),
+
+    body("is_active")
+      .optional()
+      .isBoolean()
+      .withMessage("is_active must be an boolean"),
+
+    body("min_amount")
+      .optional()
+      .isNumeric()
+      .withMessage("min_amount must be a number"),
+  ];
+};
+export { createCoupon, updateCoupon };
