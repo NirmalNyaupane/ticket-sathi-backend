@@ -10,7 +10,6 @@ import {
   Model,
 } from "sequelize";
 import { Role } from "../types/enum.js";
-import OrganizerModel from "./organizer.model.js";
 
 dotenv.config();
 
@@ -104,7 +103,4 @@ UserModel.init(
     },
   }
 );
-// UserModel.hasOne(UserModel, { onDelete: "CASCADE" });
-// UserModel.hasOne(OrganizerModel,{onDelete:"CASCADE"});
-
 export default UserModel;

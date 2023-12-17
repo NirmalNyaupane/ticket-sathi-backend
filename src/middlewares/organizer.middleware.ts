@@ -11,7 +11,8 @@ const checkShopRegistered = async (
   const isShopCreated = await UserModel.findByPk(req.user?.id, {
     attributes: ["is_organizer_registered"],
   });
-  if (isShopCreated) {
+  console.log(isShopCreated);
+  if (isShopCreated?.dataValues.is_organizer_registered) {
     return next(new ApiError(400, "Shop is already created"));
   }
   next();

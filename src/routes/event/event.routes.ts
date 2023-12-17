@@ -25,9 +25,10 @@ import {
   eventCategoryValidation,
 } from "../../validators/event/eventCategory.js";
 
+import { eventSpeakerValidation } from "../../validators/event/eventSpeaker.validation.js";
 import upload from "../../middlewares/multer.middleware.js";
 import validate from "../../validators/validate.js";
-
+import { eventSpeaker } from "../../controllers/event/eventSpeaker.controller.js";
 const router = Router();
 
 router.use(verifyJwt);
@@ -61,6 +62,16 @@ router
     updateEventValidation(),
     validate,
     updateEvent
+  );
+
+/************************** Event speaker route ********************/
+router
+  .route("/speaker")
+  .post(
+    upload.single("avatar"),
+    eventSpeakerValidation(),
+    validate,
+    eventSpeaker
   );
 
 /* ******************* Event Category ************************************************ */

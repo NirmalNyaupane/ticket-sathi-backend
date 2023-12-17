@@ -98,6 +98,5 @@ EventModel.belongsTo(EventCategoryModel, {
 EventCategoryModel.hasOne(EventModel, {
   onDelete: "CASCADE",
   foreignKey:"event_category_id",
-  // foreignKeyConstraint:true
 });
 export default EventModel;

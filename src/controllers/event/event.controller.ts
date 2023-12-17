@@ -108,6 +108,22 @@ const getEvent = async (req: Request, res: Response, next: NextFunction) => {
 
     const event = await EventModel.findAll({
       // ...ifElseObj(Object.keys(param).length > 0, { where: param }),
+      attributes: [
+        "id",
+        "name",
+        "type",
+        "description",
+        "event_start_date",
+        "event_end_date",
+        "images",
+        "poster",
+        "venue",
+        "event_category_id",
+        "status",
+        "address",
+        "createdAt",
+        "updatedAt",
+      ],
       include: [
         {
           attributes: [],

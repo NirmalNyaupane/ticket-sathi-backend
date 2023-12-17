@@ -33,7 +33,7 @@ const createCouponController = async (
 
     //checking if coupon exist or not
     const coupon = await CouponModel.findOne({
-      where: { code: code },
+      where: { code: code.toUpperCase() },
       attributes: ["id"],
     });
 
