@@ -170,8 +170,8 @@ const deleteEventSpeaker = async (
   }
 };
 export {
-  eventSpeaker,
+  deleteEventSpeaker, eventSpeaker,
   getEventSpeaker,
-  updateEventSpeaker,
-  deleteEventSpeaker,
+  updateEventSpeaker
 };
+

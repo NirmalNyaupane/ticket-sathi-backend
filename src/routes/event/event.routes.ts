@@ -25,7 +25,7 @@ import {
   eventCategoryValidation,
 } from "../../validators/event/eventCategory.js";
 
-import { eventSpeakerValidation } from "../../validators/event/eventSpeaker.validation.js";
+import { eventSpeakerValidation, updateEventSpeakerValidation} from "../../validators/event/eventSpeaker.validation.js";
 import upload from "../../middlewares/multer.middleware.js";
 import validate from "../../validators/validate.js";
 import {
@@ -87,7 +87,7 @@ router
     upload.single("avatar"),
     eventIdValidation(),
     validate,
-    updateEventValidation(),
+    updateEventSpeakerValidation(),
     validate,
     updateEventSpeaker
   )

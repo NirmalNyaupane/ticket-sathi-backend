@@ -1,4 +1,4 @@
-import { NextFunction, Response, Request } from "express";
+import { NextFunction, Response, Request, response } from "express";
 import OrganizerModel from "../../models/organizer.model.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import ApiError from "../../utils/ApiError.js";
@@ -6,13 +6,17 @@ import uploadOnClouldinary from "../../utils/clouldinary.service.js";
 import { OrganizerStatus } from "../../types/enum.js";
 import UserModel from "../../models/user.model.js";
 import { ifElseObj } from "../../utils/helper.js";
+import { Attributes, where } from "sequelize";
+import { Op } from "sequelize";
+import PaginateResponse from "../../utils/PaginateResponse.js";
 const registerOrganizerController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const {organizer_name, description, website, address, social_links} = req.body;
+    const { organizer_name, description, website, address, social_links } =
+      req.body;
     const logoLocalPath = req.files?.logo && req.files?.logo[0].path;
 
     if (!logoLocalPath) {
@@ -37,13 +41,13 @@ const registerOrganizerController = async (
       return next(new ApiError(500, "Cannot create beacuse of internal error"));
     }
 
-    const organizerFormatData = {
-      organizer_name, 
-      description, 
-      website, 
-      address, 
+    const organizerFormatData: Attributes<OrganizerModel> = {
+      organizer_name,
+      description,
+      website,
+      address,
       social_links,
-      userId: req.user?.id,
+      userId: req.user?.id as string,
       logo: logoPath?.secure_url,
       status: OrganizerStatus.PENDING,
     };
@@ -71,7 +75,9 @@ const getOrganizerProfile = async (
     });
 
     if (!organizer) {
-      next("You havenot registered as a organizer. Please registered organizer first");
+      next(
+        "You havenot registered as a organizer. Please registered organizer first"
+      );
     }
 
     return res.status(200).json(new ApiResponse(200, organizer));
@@ -127,8 +133,51 @@ const updateOrganizerController = async (
   }
 };
 
+const getAllOrganizerByAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const query = {} as {
+      where: { [key in string]: any };
+      limit: number;
+      offset: number;
+    };
+
+    const { name, limit, page } = req.query;
+
+    if (name) {
+      query.where = {
+        organizer_name: {
+          [Op.iLike]: `%${name}%`,
+        },
+      };
+    }
+
+    if (limit) query.limit = Number(limit);
+    if (page) {
+      query.offset = (+page - 1) * Number(limit || 0);
+    }
+
+    const organizers = await OrganizerModel.findAndCountAll({
+      ...query,
+    });
+    const response = PaginateResponse(
+      organizers.rows,
+      organizers.count,
+      +(limit || 0)
+    );
+
+    res.status(200).json(new ApiResponse(200, response));
+  } catch (err) {
+    console.log(err);
+    return next(new ApiError(500, "Internal server error"));
+  }
+};
 export {
   registerOrganizerController,
   getOrganizerProfile,
   updateOrganizerController,
+  getAllOrganizerByAdmin,
 };

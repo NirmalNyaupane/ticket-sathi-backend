@@ -12,4 +12,26 @@ class ApiResponse {
   }
 }
 
+export class PaginateResponse {
+  totalCount: number;
+  data: any[];
+  prevPage: number | null;
+  nextPage: number | null;
+  lastPage: number;
+
+  constructor(
+    totalCount: number,
+    data: any,
+    prevPage: null | number,
+    nextPage: null | number,
+    lastPage: number
+  ) {
+    this.totalCount = totalCount;
+    this.data = data;
+    this.prevPage = prevPage;
+    this.nextPage = nextPage;
+    this.lastPage = lastPage;
+  }
+}
+
 export default ApiResponse;

@@ -12,15 +12,19 @@ import {
   getOrganizerProfile,
   updateOrganizerController,
 } from "../../controllers/organizer/organizer.controller.js";
-import { verifyJwt, verifyPermission } from "../../middlewares/auth.middleware.js";
+import {
+  verifyJwt,
+  verifyPermission,
+} from "../../middlewares/auth.middleware.js";
 import { Role } from "../../types/enum.js";
 import checkShopRegistered from "../../middlewares/organizer.middleware.js";
+import { getAllOrganizerByAdmin } from "../../controllers/organizer/organizer.controller.js";
 const router = Router();
 
 router.use(verifyJwt);
-router.use(verifyPermission([Role.ORGANIZER]));
 
 router.route("/register").post(
+  verifyPermission([Role.ORGANIZER]),
   checkShopRegistered,
   upload.fields([
     {
@@ -33,14 +37,20 @@ router.route("/register").post(
   registerOrganizerController
 );
 
-router.route("/").get(getOrganizerProfile);
+router.route("/").get(verifyPermission([Role.ORGANIZER]), getOrganizerProfile);
 router
   .route("/edit-profile")
   .patch(
+    verifyPermission([Role.ORGANIZER]),
     upload.single("logo"),
     updateOrganizerValidation(),
     validate,
     updateOrganizerController
   );
+
+//organizer admin route
+router
+  .route("/all/admin")
+  .get(verifyPermission([Role.ADMIN]), getAllOrganizerByAdmin);
 
 export default router;

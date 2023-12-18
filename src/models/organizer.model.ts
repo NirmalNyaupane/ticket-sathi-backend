@@ -11,7 +11,7 @@ class OrganizerModel extends Model<
   InferAttributes<OrganizerModel>,
   InferCreationAttributes<OrganizerModel>
 > {
-  declare id: string;
+  declare id?: string;
   declare userId: string;
   declare organizer_name: string;
   declare logo: string;

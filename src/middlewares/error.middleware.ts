@@ -1,6 +1,5 @@
-import { NextFunction, Request, Response, Errback } from "express";
+import { NextFunction, Request, Response } from "express";
 import ApiError from "../utils/ApiError.js";
-import dotenv from "dotenv";
 const errorHandler = (
   err: ApiError,
   req: Request,
@@ -15,7 +14,10 @@ const errorHandler = (
 
   if (!(error instanceof ApiError)) {
     console.log(err);
-    error = new ApiError(500, "Something went wrong");
+    error = new ApiError(
+      err.statusCode ? err.statusCode : 500,
+      err.message ? err.message : "Something went wrong"
+    );
   }
 
   const response = {

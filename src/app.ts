@@ -1,17 +1,16 @@
-import http from "http";
-import express from "express";
+import cookieParsel from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import express from "express";
 import { rateLimit } from "express-rate-limit";
+import fs from "fs";
 import helmet from "helmet";
-import errorHandler from "./middlewares/error.middleware.js";
+import http from "http";
+import path from "path";
+import swaggerUi from "swagger-ui-express";
 import { fileURLToPath } from "url";
 import yaml from "yaml";
-import fs from "fs";
-import swaggerUi from "swagger-ui-express";
-import cookieParsel from "cookie-parser";
-import path from "path";
-import Tokens from "csrf";
+import errorHandler from "./middlewares/error.middleware.js";
 dotenv.config();
 
 const __fileName = fileURLToPath(import.meta.url);
@@ -74,12 +73,12 @@ app.use(
 // });
 /*************************** app route starts *******************************************/
 import authRouter from "./routes/auth/auth.routes.js";
-import ApiError from "./utils/ApiError.js";
 import userRouter from "./routes/auth/user.routes.js";
-import organizerRouter from "./routes/organizer/organizer.routes.js";
+import couponRouter from "./routes/event/coupon.routes.js";
 import eventRouter from "./routes/event/event.routes.js";
 import ticketRouter from "./routes/event/ticket.routes.js";
-import couponRouter from "./routes/event/coupon.routes.js";
+import organizerRouter from "./routes/organizer/organizer.routes.js";
+import ApiError from "./utils/ApiError.js";
 //auth router
 app.use("/auth", authRouter);
 
