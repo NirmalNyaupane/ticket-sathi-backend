@@ -1,24 +1,28 @@
-import { Request, Router } from "express";
-import OrganizerModel from "../../models/organizer.model.js";
-import ApiResponse from "../../utils/ApiResponse.js";
-import validate from "../../validators/validate.js";
+import { Router } from "express";
 import {
-  registerOrganizer,
-  updateOrganizerValidation,
-} from "../../validators/organizers/registerOrganizer.js";
-import upload from "../../middlewares/multer.middleware.js";
+  paginateAndSearchRequestValidators,
+  validateId,
+} from "../../validators/common.validation.js";
 import {
-  registerOrganizerController,
+  getAllOrganizerByAdmin,
   getOrganizerProfile,
+  registerOrganizerController,
   updateOrganizerController,
+  changeOrganizerStatus as changeOrganizerController
 } from "../../controllers/organizer/organizer.controller.js";
 import {
   verifyJwt,
   verifyPermission,
 } from "../../middlewares/auth.middleware.js";
-import { Role } from "../../types/enum.js";
+import upload from "../../middlewares/multer.middleware.js";
 import checkShopRegistered from "../../middlewares/organizer.middleware.js";
-import { getAllOrganizerByAdmin } from "../../controllers/organizer/organizer.controller.js";
+import { Role } from "../../types/enum.js";
+import {
+  registerOrganizer,
+  updateOrganizerValidation,
+  changeOrganizerStatus,
+} from "../../validators/organizers/registerOrganizer.js";
+import validate from "../../validators/validate.js";
 const router = Router();
 
 router.use(verifyJwt);
@@ -51,6 +55,22 @@ router
 //organizer admin route
 router
   .route("/all/admin")
-  .get(verifyPermission([Role.ADMIN]), getAllOrganizerByAdmin);
+  .get(
+    verifyPermission([Role.ADMIN]),
+    paginateAndSearchRequestValidators(),
+    validate,
+    getAllOrganizerByAdmin
+  );
+
+router
+  .route("/change-status/:id")
+  .post(
+    verifyPermission([Role.ADMIN]),
+    validateId(),
+    validate,
+    changeOrganizerStatus(),
+    validate, 
+    changeOrganizerController
+  );
 
 export default router;

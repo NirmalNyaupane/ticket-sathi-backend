@@ -81,7 +81,7 @@ UserModel.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM(Role.USER, Role.ORGANIZER),
+      type: DataTypes.ENUM(Role.USER, Role.ORGANIZER, Role.ADMIN),
       allowNull: false,
     },
     is_verified: {
