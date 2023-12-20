@@ -1,13 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import { Attributes, Op, or } from "sequelize";
+import { Attributes, Op } from "sequelize";
 import OrganizerModel from "../../models/organizer.model.js";
 import UserModel from "../../models/user.model.js";
-import { OrganizerStatus } from "../../types/enum.js";
+import { OrganizerStatus, Role } from "../../types/enum.js";
+import { QueryType } from "../../types/queryType.typs.js";
 import ApiError from "../../utils/ApiError.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import PaginateResponse from "../../utils/PaginateResponse.js";
 import uploadOnClouldinary from "../../utils/clouldinary.service.js";
 import { ifElseObj } from "../../utils/helper.js";
+import pageAndLimit from "../../utils/pageAndlimit.js";
 const registerOrganizerController = async (
   req: Request,
   res: Response,
@@ -138,26 +140,19 @@ const getAllOrganizerByAdmin = async (
   next: NextFunction
 ) => {
   try {
-    const query = {} as {
-      where: { [key in string]: any };
-      limit: number;
-      offset: number;
-    };
-
     const { name, limit, page, status } = req.query;
-
-    if (name) {
-      query.where = {
-        organizer_name: {
-          [Op.iLike]: `%${name}%`,
-        },
-      };
-    }
-
-    if (limit) query.limit = Number(limit);
-    if (page) {
-      query.offset = (+page - 1) * Number(limit || 0);
-    }
+    const query: QueryType = pageAndLimit(Number(page), Number(limit));
+    query.where = {
+      ...ifElseObj(name !== undefined, {
+        organizer_name: { [Op.iLike]: `%${name}%` },
+      }),
+      ...ifElseObj(req.user?.role !== Role.ADMIN, {
+        status: OrganizerStatus.ACTIVE,
+      }),
+      ...ifElseObj(status !== undefined && req.user?.role === Role.ADMIN, {
+        status: { [Op.eq]: status },
+      }),
+    };
 
     const organizers = await OrganizerModel.findAndCountAll({
       ...query,
@@ -212,9 +207,9 @@ const changeOrganizerStatus = async (
 };
 
 export {
+  changeOrganizerStatus,
   getAllOrganizerByAdmin,
   getOrganizerProfile,
   registerOrganizerController,
   updateOrganizerController,
-  changeOrganizerStatus,
 };

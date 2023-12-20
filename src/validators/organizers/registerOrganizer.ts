@@ -1,4 +1,4 @@
-import { body, check, param } from "express-validator";
+import { body, check, param, query } from "express-validator";
 import { OrganizerStatus } from "../../types/enum.js";
 
 const registerOrganizer = () => {
@@ -55,4 +55,24 @@ const changeOrganizerStatus = () => {
   ];
 };
 
-export { registerOrganizer, updateOrganizerValidation, changeOrganizerStatus };
+const filterOrganizerStatus = () => {
+  return [
+    query("status")
+      .optional()
+      .isIn([
+        OrganizerStatus.ACTIVE,
+        OrganizerStatus.PENDING,
+        OrganizerStatus.SUSPEND,
+      ])
+      .withMessage(
+        `status must be one of ${OrganizerStatus.ACTIVE}, ${OrganizerStatus.PENDING}, ${OrganizerStatus.SUSPEND}`
+      ),
+  ];
+};
+
+export {
+  registerOrganizer,
+  updateOrganizerValidation,
+  changeOrganizerStatus,
+  filterOrganizerStatus,
+};

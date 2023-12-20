@@ -92,3 +92,4 @@ const updateEventValidation = () => {
 };
 
 export { createEventValidation, eventIdValidation, updateEventValidation };
+

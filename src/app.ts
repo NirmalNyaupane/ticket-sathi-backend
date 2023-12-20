@@ -78,6 +78,7 @@ import couponRouter from "./routes/event/coupon.routes.js";
 import eventRouter from "./routes/event/event.routes.js";
 import ticketRouter from "./routes/event/ticket.routes.js";
 import organizerRouter from "./routes/organizer/organizer.routes.js";
+import commissionRouter from './routes/commission/commission.routes.js'
 import ApiError from "./utils/ApiError.js";
 //auth router
 app.use("/auth", authRouter);
@@ -92,6 +93,7 @@ app.use("/organizer", organizerRouter);
 app.use("/event", eventRouter);
 app.use("/event-ticket", ticketRouter);
 app.use("/coupons", couponRouter);
+app.use("/commission", commissionRouter);
 /**** global error handler *****/
 
 app.use(errorHandler);

@@ -1,15 +1,18 @@
 import { NextFunction, Request, Response } from "express";
+import { Attributes, Op } from "sequelize";
 import EventModel from "../../models/event.model.js";
 import EventCategoryModel from "../../models/eventcategory.model.js";
 import OrganizerModel from "../../models/organizer.model.js";
 import UserModel from "../../models/user.model.js";
 import { error } from "../../theme/chalk.theme.js";
+import { EventStatus, Role } from "../../types/enum.js";
+import { QueryType } from "../../types/queryType.typs.js";
 import ApiError from "../../utils/ApiError.js";
 import ApiResponse from "../../utils/ApiResponse.js";
+import PaginateResponse from "../../utils/PaginateResponse.js";
 import uploadOnClouldinary from "../../utils/clouldinary.service.js";
 import { ifElseObj } from "../../utils/helper.js";
-import { Attributes } from "sequelize";
-import TicketModel from "../../models/ticket.model.js";
+import pageAndLimit from "../../utils/pageAndlimit.js";
 const createEvent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {
@@ -234,4 +237,58 @@ const updateEvent = async (req: Request, res: Response, next: NextFunction) => {
     next(new ApiError(500, "Internal server error"));
   }
 };
-export { createEvent, getEvent, deleteEvent, updateEvent };
+
+const getAllEventByAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { page, limit, name, status } = req.query;
+    const query: QueryType = pageAndLimit(Number(page), Number(limit));
+    const role = req.user?.role;
+
+    //query
+    query.where = {
+      ...ifElseObj(name !== undefined, {
+        name: { [Op.iLike]: `%${name}%` },
+      }),
+      ...ifElseObj(role !== Role.ADMIN, { status: EventStatus.PUBLISHED }),
+      ...ifElseObj(status !== undefined, { status: { [Op.eq]: status } }),
+    };
+    
+    const event = await EventModel.findAndCountAll({ ...query });
+    const response = PaginateResponse(event.rows, event.count);
+    return res.status(200).json(new ApiResponse(200, response));
+  } catch (error) {
+    console.log(error);
+    next(new ApiError(500, "Internal Server Error"));
+  }
+};
+
+const getAllPublishedEvent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { page, limit, name } = req.query;
+    const query: QueryType = pageAndLimit(Number(page), Number(limit));
+
+    query.where = {
+      ...ifElseObj(name !== undefined, {
+        organizer_name: { [Op.iLike]: `%${name}%` },
+      }),
+      status: EventStatus.PUBLISHED,
+    };
+    const event = await EventModel.findAndCountAll({ ...query });
+    const response = PaginateResponse(event.rows, event.count);
+    return res.status(200).json(new ApiResponse(200, response));
+  } catch (error) {
+    console.log(error);
+    next(new ApiError(500, "Internal Server Error"));
+  }
+};
+
+export { createEvent, deleteEvent, getAllEventByAdmin, getEvent, updateEvent };
+

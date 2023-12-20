@@ -2,11 +2,13 @@ import { Router } from "express";
 import {
   createEvent as createEventController,
   deleteEvent,
+  getAllEventByAdmin,
   getEvent,
   updateEvent,
 } from "../../controllers/event/event.controller.js";
 import {
   createEventCategory,
+  deleteCategory,
   getAllCategory,
   updateCategory,
 } from "../../controllers/event/eventCategory.controller.js";
@@ -25,24 +27,26 @@ import {
   eventCategoryValidation,
 } from "../../validators/event/eventCategory.js";
 
-import { eventSpeakerValidation, updateEventSpeakerValidation} from "../../validators/event/eventSpeaker.validation.js";
-import upload from "../../middlewares/multer.middleware.js";
-import validate from "../../validators/validate.js";
 import {
+  deleteEventSpeaker,
   eventSpeaker,
   getEventSpeaker,
   updateEventSpeaker,
-  deleteEventSpeaker,
 } from "../../controllers/event/eventSpeaker.controller.js";
+import upload from "../../middlewares/multer.middleware.js";
+import {
+  eventSpeakerValidation,
+  updateEventSpeakerValidation,
+} from "../../validators/event/eventSpeaker.validation.js";
+import validate from "../../validators/validate.js";
 const router = Router();
-
-router.use(verifyJwt);
-router.use(verifyPermission([Role.ORGANIZER]));
 
 /* ************************* Event router starts ************************************* */
 router
   .route("/")
   .post(
+    verifyJwt,
+    verifyPermission([Role.ORGANIZER]),
     upload.fields([
       {
         name: "poster_image",
@@ -57,12 +61,20 @@ router
     validate,
     createEventController
   )
-  .get(getEvent);
+  .get(verifyJwt, verifyPermission([Role.ORGANIZER]), getEvent);
 
 router
   .route("/:id")
-  .delete(eventIdValidation(), validate, deleteEvent)
+  .delete(
+    verifyJwt,
+    verifyPermission([Role.ORGANIZER, Role.ADMIN]),
+    eventIdValidation(),
+    validate,
+    deleteEvent
+  )
   .patch(
+    verifyJwt,
+    verifyPermission([Role.ORGANIZER]),
     upload.single("poster_image"),
     updateEventValidation(),
     validate,
@@ -73,6 +85,8 @@ router
 router
   .route("/speaker")
   .post(
+    verifyJwt,
+    verifyPermission([Role.ORGANIZER]),
     upload.single("avatar"),
     eventSpeakerValidation(),
     validate,
@@ -82,8 +96,16 @@ router
 //get all event speakers by an event_id and update, delete by speaker id
 router
   .route("/speaker/:id")
-  .get(eventIdValidation(), validate, getEventSpeaker)
+  .get(
+    verifyJwt,
+    verifyPermission([Role.ORGANIZER]),
+    eventIdValidation(),
+    validate,
+    getEventSpeaker
+  )
   .patch(
+    verifyJwt,
+    verifyPermission([Role.ORGANIZER]),
     upload.single("avatar"),
     eventIdValidation(),
     validate,
@@ -91,16 +113,43 @@ router
     validate,
     updateEventSpeaker
   )
-  .delete(eventIdValidation(), validate, deleteEventSpeaker);
+  .delete(
+    verifyJwt,
+    verifyPermission([Role.ORGANIZER]),
+    eventIdValidation(),
+    validate,
+    deleteEventSpeaker
+  );
 
 /* ******************* Event Category ************************************************ */
 router
   .route("/category")
-  .get(getAllCategory)
+  .get(verifyJwt, verifyPermission([Role.ORGANIZER]), getAllCategory)
   .post(eventCategoryValidation(), validate, createEventCategory);
 
 router
   .route("/category/:id")
-  .patch(eventCategoryUpdateValidaton(), validate, updateCategory)
-  .delete(eventCategoryValidation(), validate);
+  .patch(
+    verifyJwt,
+    verifyPermission([Role.ORGANIZER]),
+    eventCategoryUpdateValidaton(),
+    validate,
+    updateCategory
+  )
+  .delete(
+    verifyJwt,
+    verifyPermission([Role.ORGANIZER]),
+    eventCategoryValidation(),
+    validate,
+    deleteCategory
+  );
+
+
+/******************event admin route**********************/
+router.route("/all/admin").get(verifyJwt, verifyPermission([Role.ADMIN]), getAllEventByAdmin)
+
+
+/**Event open route */
+router.route("/all").get(getAllEventByAdmin);
 export default router;
+

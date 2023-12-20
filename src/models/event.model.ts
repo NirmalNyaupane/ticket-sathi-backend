@@ -1,8 +1,8 @@
 import {
-  Model,
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
+  Model,
 } from "sequelize";
 import { sequelize } from "../db/index.js";
 import { Event, EventStatus } from "../types/enum.js";
@@ -70,7 +70,7 @@ EventModel.init(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM(EventStatus.ACTIVE, EventStatus.PENDING),
+      type: DataTypes.ENUM(EventStatus.PUBLISHED, EventStatus.PENDING, EventStatus.REJECTED),
       allowNull: false,
       defaultValue: EventStatus.PENDING,
     },
