@@ -5,6 +5,7 @@ import ApiError from "../../utils/ApiError.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import uploadOnClouldinary from "../../utils/clouldinary.service.js";
 import { ifElseObj } from "../../utils/helper.js";
+
 const getCurrentUser = async (req: Request, res: Response) => {
   res
     .status(200)

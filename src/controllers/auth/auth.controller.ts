@@ -46,7 +46,7 @@ const registerUserController = async (
     }
 
     //send otp mail
-    await sendMail({
+    sendMail({
       email: req.body.email,
       subject: "Email verification",
       mailGenContent: registerEmailVerificationMailGenContent(
@@ -150,7 +150,7 @@ const emailVerificationController = async (
     //If email is not in table that means email is not registered and throw email is not registered message
     if (!otp) {
       return next(
-        new ApiError(410, "Email is not registered", ["Bad request"])
+        new ApiError(410, "Email is not registered")
       );
     }
 
@@ -166,7 +166,7 @@ const emailVerificationController = async (
 
     //if otp is not matched, send invalid otp
     if (!(await otp?.verifyOtp(bodyOtp))) {
-      return next(new ApiError(409, "Invalid otp", ["Bad request"]));
+      return next(new ApiError(409, "Invalid otp"));
     }
 
     //check if otp is expired or not

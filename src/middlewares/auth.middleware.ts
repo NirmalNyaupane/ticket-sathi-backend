@@ -31,6 +31,7 @@ const verifyJwt = async (req: Request, res: Response, next: NextFunction) => {
         "is_verified",
         "createdAt",
         "updatedAt",
+        "is_organizer_registered"
       ],
     });
     if (!user) {
